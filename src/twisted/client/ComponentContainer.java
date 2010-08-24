@@ -190,14 +190,16 @@ public class ComponentContainer extends ComponentFrame {
 	private Element getParentComponent(Element e) {
 		Element rtn = null;
 		Element parent = e.getParentElement();
-		while ((parent != null) && (rtn == null)) {
+		loop: while ((parent != null) && (rtn == null)) {
 			String classname = parent.getClassName();
 			if (classname != null) {
 				if(classname.contains("Component")) {
 					String set[] = classname.split(" ");
 					for (String s : set) {
-						if (s.equals("Component"))
+						if (s.equals("Component")) {
 							rtn = parent;
+							break loop;
+						}
 					}
 				}
 			}

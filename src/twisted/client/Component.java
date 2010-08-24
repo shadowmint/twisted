@@ -18,6 +18,8 @@ package twisted.client;
 
 import java.util.ArrayList;
 
+import com.google.gwt.dom.client.Element;
+
 /** 
  * Common base for all components. 
  * <p>
@@ -213,6 +215,16 @@ public abstract class Component {
 	/** Returns the container. */
 	public ComponentContainer getContainer() {
 		return(root);
+	}
+	
+	/** Shortcut to get an asset. */
+	public Element getAsset(String id) {
+		return(getContainer().getAsset(id));
+	}
+	
+	/** Shortcut to get a value. */
+	public String getValue(String id) {
+		return(getContainer().getValue(id));
 	}
 	
 	/** 
