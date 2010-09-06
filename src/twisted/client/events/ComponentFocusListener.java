@@ -1,5 +1,5 @@
 /** 
-http://localhost:8888/Component_IptvNumberChecker.html?gwt.codesvr=10.59.90.130:9997 * Copyright 2010 Douglas Linder.
+ * Copyright 2010 Douglas Linder.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
