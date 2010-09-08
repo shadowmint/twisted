@@ -20,11 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** 
- * Common base for all component services which are independent servlets.
- * <p>
- * ...
- */
+/** Common base for all component services which are independent servlets. */
 @SuppressWarnings("serial")
 public abstract class ComponentServlet extends HttpServlet implements ComponentService {
 	

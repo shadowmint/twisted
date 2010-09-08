@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package twisted.client;
+package twisted.client.impl;
 
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;

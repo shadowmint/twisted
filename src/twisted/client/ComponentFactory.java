@@ -16,6 +16,8 @@
 
 package twisted.client;
 
+import twisted.client.ComponentContainer;
+
 /**
  * Factory for creating component instances.
  * <p>

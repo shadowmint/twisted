@@ -18,7 +18,7 @@ package twisted.client.events;
 
 import java.util.HashMap;
 
-import twisted.client.ComponentFrame;
+import twisted.client.impl.ComponentFrame;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;

@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.query.client.GQuery;
+
+import twisted.client.impl.ComponentFrame;
+import twisted.client.impl.ComponentQuery;
+import twisted.client.ComponentRegister;
 
 /** 
  * Converts arbitrary Elements into valid GWT containers.
@@ -173,11 +176,11 @@ public class ComponentContainer extends ComponentFrame {
 		ArrayList<Element> rtn = elements.get(classname);
 		if ((rtn == null) || (rtn.size() > limit)) {
 			rtn = new ArrayList<Element>();
-			GQuery q = GQuery.$("."+classname, root);
-			int count = q.size();
+			ComponentQuery q = ComponentQuery.query("."+classname, root);
+			int count = q.getLength();
 			int found = 0;
 			for (int i = 0; (found < limit) && (i < count); ++i) {
-				Element e = q.get(i);
+				Element e = q.getItem(i);
 				if (getParentComponent(e) == root) 
 					rtn.add(e);
 			}

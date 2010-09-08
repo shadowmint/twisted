@@ -1,10 +1,10 @@
-/** 
+/**
  * Copyright 2010 Douglas Linder.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -20,33 +20,33 @@ import java.util.HashMap;
 
 import twisted.client.impl.ComponentFrame;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
-import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
+import com.google.gwt.event.dom.client.HasLoadHandlers;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /** Allows key listeners to be bound to an element. */
-public class ComponentChangeListener extends ComponentFrame implements HasChangeHandlers {
+public class ComponentLoadListener extends ComponentFrame implements HasLoadHandlers {
 
 	/** Click listener cache. */
-	private static HashMap<Element, ComponentChangeListener> localCache = new HashMap<Element, ComponentChangeListener>();
-	
-	protected ComponentChangeListener(Element root) {
+	private static HashMap<Element, ComponentLoadListener> localCache = new HashMap<Element, ComponentLoadListener>();
+
+	protected ComponentLoadListener(Element root) {
 		super(root);
 	}
 
 	/** Returns a cached copy of the click listener for an object. */
-	public static ComponentChangeListener get(Element root) {
-		ComponentChangeListener rtn = localCache.get(root);
+	public static ComponentLoadListener get(Element root) {
+		ComponentLoadListener rtn = localCache.get(root);
 		if ((rtn == null) && (root != null)) {
-			rtn = new ComponentChangeListener(root);
+			rtn = new ComponentLoadListener(root);
 			localCache.put(root, rtn);
 		}
 		return(rtn);
 	}
 
 	@Override
-	public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return addDomHandler(handler, ChangeEvent.getType());
+	public HandlerRegistration addLoadHandler(LoadHandler handler) {
+        return addDomHandler(handler, LoadEvent.getType());
 	}
 }

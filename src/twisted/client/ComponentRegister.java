@@ -21,12 +21,16 @@ import java.util.HashMap;
 import java.util.Date;
 import java.util.Set;
 
+import twisted.client.impl.ComponentQuery;
 import twisted.client.utils.CommonEvents;
 import twisted.client.utils.GenericCallback;
+import twisted.client.Component;
+import twisted.client.ComponentContainer;
+import twisted.client.ComponentFactory;
+import twisted.client.ComponentLog;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
-import com.google.gwt.query.client.GQuery;
 import com.google.gwt.user.client.Timer;
 
 /** 
@@ -100,10 +104,10 @@ public class ComponentRegister {
 		if (timer != null) {
 			timer.schedule(timeout);
 		}
-		GQuery elements = GQuery.$(".Component", root);
-		int count = elements.size();
+		ComponentQuery elements = ComponentQuery.query(".Component", root);
+		int count = elements.getLength();
 		for (int i = 0; i < count; ++i) {
-			root = elements.get(i);
+			root = elements.getItem(i);
 			if (getComponent(root) == null) {
 				ComponentContainer cc = ComponentContainer.get(root, this);
 				String requestId = createRequestId(cc);
