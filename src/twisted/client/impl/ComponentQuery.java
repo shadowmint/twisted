@@ -18,6 +18,8 @@ package twisted.client.impl;
 
 import java.util.ArrayList;
 
+import twisted.client.ComponentLog;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
@@ -61,9 +63,9 @@ public class ComponentQuery {
 					Node n = set.getItem(i);
 					if (n.getNodeType() == Node.ELEMENT_NODE) {
 						if (n.hasChildNodes()) 
-						children.add(n.getChildNodes());
-					if (matchesClassTarget(n, classname)) 
-						rtnSet.add(Element.as(n));
+							children.add(n.getChildNodes());
+						if (matchesClassTarget(n, classname)) 
+							rtnSet.add(Element.as(n));
 					}
 				}
 			}
@@ -99,6 +101,7 @@ public class ComponentQuery {
 					else if ((pre == ' ') && (post == '\0'))
 						break; // Case 2
 				}
+				++offset; // Start at the next character.
 			}
 		}
 		return(rtn);

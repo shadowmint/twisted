@@ -104,7 +104,7 @@ public class ComponentRegister {
 		if (timer != null) {
 			timer.schedule(timeout);
 		}
-		ComponentQuery elements = ComponentQuery.query(".Component", root);
+		ComponentQuery elements = ComponentQuery.query("Component", root);
 		int count = elements.getLength();
 		for (int i = 0; i < count; ++i) {
 			root = elements.getItem(i);

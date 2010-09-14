@@ -28,7 +28,7 @@ import com.google.gwt.user.client.Window;
 public class ComponentLog {
 	
 	/** Possible debug levels */
-	enum DebugLevel { 
+	public enum DebugLevel { 
 		
 		/** Keep last MAX_LOG_SIZE messages. */
 		KEEP,

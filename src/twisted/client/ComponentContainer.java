@@ -176,7 +176,7 @@ public class ComponentContainer extends ComponentFrame {
 		ArrayList<Element> rtn = elements.get(classname);
 		if ((rtn == null) || (rtn.size() > limit)) {
 			rtn = new ArrayList<Element>();
-			ComponentQuery q = ComponentQuery.query("."+classname, root);
+			ComponentQuery q = ComponentQuery.query(classname, root);
 			int count = q.getLength();
 			int found = 0;
 			for (int i = 0; (found < limit) && (i < count); ++i) {
