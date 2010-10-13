@@ -135,6 +135,68 @@ public class ComponentContainer extends ComponentFrame {
 		return(rtn);
 	}
 	
+	/** Sets the a specific value, by name. */
+	public void setValue(String id, String  value) {
+		if ((id != null) && (value != null)) {
+			ArrayList<Element> set = getElements("ComponentId-"+id, 1, root);
+			for (Element e : set) {
+				e.setInnerHTML(value);
+			}
+		}
+	}
+	
+	/** 
+	 * Sets the a specific value, by name.
+	 * <p>
+	 * This is specifically public static so it can be used to
+	 * process template component blocks before passing them to
+	 * the component register.
+	 * <p>
+	 * To do that, do something like:<br/>
+	 * e.setInnerHtml(content);<br/>
+	 * ComponentContainer.setTemplateValue(id, value, e);
+	 */
+	public static void injectValue(String id, String  value, Element root) {
+		if ((id != null) && (value != null)) {
+			ArrayList<Element> set = getElementsNoCache("ComponentId-"+id, 1, root);
+			for (Element e : set) {
+				e.setInnerHTML(value);
+			}
+		}
+	}
+	
+	/** 
+	 * Sets the a specific asset, by name.
+	 * <p>
+	 * This is specifically public static so it can be used to
+	 * process template component blocks before passing them to
+	 * the component register.
+	 * <p>
+	 * Note that this will replace the Asset in the template, not
+	 * set the asset param as a child element. The class values
+	 * 'ComponentAsset' and 'ComponentId-[id]' are added if they
+	 * are not present in the asset.
+	 * <p>
+	 * To do that, do something like:<br/>
+	 * e.setInnerHtml(content);<br/>
+	 * ComponentContainer.setTemplateValue(id, value, e);
+	 */
+	public static void injectAsset(String id, Element asset, Element root) {
+		if ((id != null) && (asset != null)) {
+		  if (!asset.getClassName().contains("ComponentAsset"))
+  		  asset.addClassName("ComponentAsset");
+		  if (!asset.getClassName().contains("ComponentId-"+id))
+  		  asset.addClassName("ComponentId-"+id);
+			ArrayList<Element> set = getElementsNoCache("ComponentId-"+id, 1, root);
+			for (Element e : set) {
+			  if (e.getParentElement() != null) {
+  			  e.getParentElement().appendChild(asset);
+  			  e.getParentElement().removeChild(e);
+			  }
+			}
+		}
+	}
+	
 	/** Returns a value by name. */
 	public String getValue(String id) {
 		return(getValue(id, root));
@@ -175,22 +237,32 @@ public class ComponentContainer extends ComponentFrame {
 	private ArrayList<Element> getElements(String classname, int limit, Element root) {
 		ArrayList<Element> rtn = elements.get(classname);
 		if ((rtn == null) || (rtn.size() > limit)) {
-			rtn = new ArrayList<Element>();
-			ComponentQuery q = ComponentQuery.query(classname, root);
-			int count = q.getLength();
-			int found = 0;
-			for (int i = 0; (found < limit) && (i < count); ++i) {
-				Element e = q.getItem(i);
-				if (getParentComponent(e) == root) 
-					rtn.add(e);
-			}
+			rtn = getElementsNoCache(classname, limit, root);
 			elements.put(classname, rtn);
 		}
 		return(rtn);
 	}
 	
+	/** 
+	 * Returns elements which are not the child of any other component matching classname.
+	 * <p>
+	 * The results are not cached.
+	 */
+	private static ArrayList<Element> getElementsNoCache(String classname, int limit, Element root) {
+		ArrayList<Element> rtn = new ArrayList<Element>();
+		ComponentQuery q = ComponentQuery.query(classname, root);
+		int count = q.getLength();
+		int found = 0;
+		for (int i = 0; (found < limit) && (i < count); ++i) {
+			Element e = q.getItem(i);
+			if (getParentComponent(e) == root) 
+				rtn.add(e);
+		}
+		return(rtn);
+	}
+	
 	/** Finds the parent component of an element. */
-	private Element getParentComponent(Element e) {
+	private static Element getParentComponent(Element e) {
 		Element rtn = null;
 		Element parent = e.getParentElement();
 		loop: while ((parent != null) && (rtn == null)) {
