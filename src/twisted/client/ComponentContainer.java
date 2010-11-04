@@ -131,18 +131,29 @@ public class ComponentContainer extends ComponentFrame {
 	
 	/** Returns assets by name, specifying base node. */
 	public ArrayList<Element> getAssets(String id, int limit, Element root) {
-		ArrayList<Element> rtn = getElements("ComponentId-"+id, limit, root);
+		ArrayList<Element> rtn = getElements("ComponentAsset", "ComponentId-"+id, limit, root);
 		return(rtn);
 	}
 	
 	/** Sets the a specific value, by name. */
 	public void setValue(String id, String  value) {
 		if ((id != null) && (value != null)) {
-			ArrayList<Element> set = getElements("ComponentId-"+id, 1, root);
+			ArrayList<Element> set = getElements("ComponentValue", "ComponentId-"+id, 1, root);
 			for (Element e : set) {
 				e.setInnerHTML(value);
 			}
 		}
+	}
+	
+	/** Shortcut to get an element by ID. */
+	public static Element getElementById(String id, Element parent) {
+	  Element rtn = null; 
+		if ((id != null) && (parent != null)) {
+		  ComponentQuery q = ComponentQuery.query(id, parent, ComponentQuery.QueryType.ID);
+		  if (q.getLength() > 0)
+		    rtn = q.getItem(0);
+		}
+		return(rtn);
 	}
 	
 	/** 
@@ -154,11 +165,12 @@ public class ComponentContainer extends ComponentFrame {
 	 * <p>
 	 * To do that, do something like:<br/>
 	 * e.setInnerHtml(content);<br/>
-	 * ComponentContainer.setTemplateValue(id, value, e);
+	 * Element root = e.getFirstChildElement();<br/>
+	 * ComponentContainer.injectValue(id, value, e);
 	 */
 	public static void injectValue(String id, String  value, Element root) {
 		if ((id != null) && (value != null)) {
-			ArrayList<Element> set = getElementsNoCache("ComponentId-"+id, 1, root);
+			ArrayList<Element> set = getElementsNoCache("ComponentValue", "ComponentId-"+id, 1, root);
 			for (Element e : set) {
 				e.setInnerHTML(value);
 			}
@@ -179,7 +191,8 @@ public class ComponentContainer extends ComponentFrame {
 	 * <p>
 	 * To do that, do something like:<br/>
 	 * e.setInnerHtml(content);<br/>
-	 * ComponentContainer.setTemplateValue(id, value, e);
+	 * Element root = e.getFirstChildElement();<br/>
+	 * ComponentContainer.injectAsset(id, value, e);
 	 */
 	public static void injectAsset(String id, Element asset, Element root) {
 		if ((id != null) && (asset != null)) {
@@ -187,7 +200,7 @@ public class ComponentContainer extends ComponentFrame {
   		  asset.addClassName("ComponentAsset");
 		  if (!asset.getClassName().contains("ComponentId-"+id))
   		  asset.addClassName("ComponentId-"+id);
-			ArrayList<Element> set = getElementsNoCache("ComponentId-"+id, 1, root);
+			ArrayList<Element> set = getElementsNoCache("ComponentAsset", "ComponentId-"+id, 1, root);
 			for (Element e : set) {
 			  if (e.getParentElement() != null) {
   			  e.getParentElement().appendChild(asset);
@@ -220,7 +233,7 @@ public class ComponentContainer extends ComponentFrame {
 	public ArrayList<String> getValues(String id, int limit, Element root) {
 		ArrayList<String> rtn = new ArrayList<String>();
 		if (id != null) {
-			ArrayList<Element> set = getElements("ComponentId-"+id, limit, root);
+			ArrayList<Element> set = getElements("ComponentValue", "ComponentId-"+id, limit, root);
 			for (Element e : set) {
 				rtn.add(e.getInnerHTML());
 			}
@@ -234,11 +247,11 @@ public class ComponentContainer extends ComponentFrame {
 	 * The elements returned are ones under the node 'root' provided. To search the entire
 	 * component this.root should be passed as 'root'.
 	 */
-	private ArrayList<Element> getElements(String classname, int limit, Element root) {
-		ArrayList<Element> rtn = elements.get(classname);
+	private ArrayList<Element> getElements(String type, String id, int limit, Element root) {
+		ArrayList<Element> rtn = elements.get(type + "-" + id);
 		if ((rtn == null) || (rtn.size() > limit)) {
-			rtn = getElementsNoCache(classname, limit, root);
-			elements.put(classname, rtn);
+			rtn = getElementsNoCache(type, id, limit, root);
+			elements.put(type + "-" + id, rtn);
 		}
 		return(rtn);
 	}
@@ -247,16 +260,20 @@ public class ComponentContainer extends ComponentFrame {
 	 * Returns elements which are not the child of any other component matching classname.
 	 * <p>
 	 * The results are not cached.
+	 * @type The class type, eg. ComponentAsset
+	 * @id The component id to match, eg. ComponentId-Panel
 	 */
-	private static ArrayList<Element> getElementsNoCache(String classname, int limit, Element root) {
+	private static ArrayList<Element> getElementsNoCache(String type, String id, int limit, Element root) {
 		ArrayList<Element> rtn = new ArrayList<Element>();
-		ComponentQuery q = ComponentQuery.query(classname, root);
-		int count = q.getLength();
+		ComponentQuery ids = ComponentQuery.query(id, root);
+		ComponentQuery types = ComponentQuery.query(type, root);
+		int count = ids.getLength();
 		int found = 0;
 		for (int i = 0; (found < limit) && (i < count); ++i) {
-			Element e = q.getItem(i);
-			if (getParentComponent(e) == root) 
-				rtn.add(e);
+			Element e = ids.getItem(i);
+			if (types.contains(e))
+  			if (getParentComponent(e) == root) 
+  				rtn.add(e);
 		}
 		return(rtn);
 	}

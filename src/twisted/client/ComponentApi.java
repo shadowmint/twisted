@@ -19,15 +19,15 @@ package twisted.client;
 /** The base class for APIs exposed between components. */
 public abstract class ComponentApi {
 	
-	/** Owner of the api. */
-	protected Component parent;
+	/** Utility helper class. */
+	protected ComponentUtils utils;
 	
 	public ComponentApi(Component parent) {
-		this.parent = parent;
+		this.utils = parent.getHelper();
 	}
 	
 	/** Returns the owner of the Api */
 	public Component getParent() {
-		return(parent);
+		return(utils.getParent());
 	}
 }

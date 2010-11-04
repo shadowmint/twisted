@@ -46,4 +46,14 @@ public abstract class ComponentFactory {
 	 * so errors cannot propagate upwards.
 	 */
 	public abstract void createComponent(ComponentContainer root, String requestId);
+	
+	/** Shortcut for successfully creating a component. */
+	protected void componentCreated(Component component, String requestId) {
+	  component.getContainer().getRegister().componentCreated(component, requestId);
+	}
+	
+	/** Shortcut for failing to create a component. */
+	protected void componentCreationFailed(ComponentContainer root, String requestId) {
+	  root.getRegister().componentCreationFailed(requestId);
+	}
 }

@@ -18,8 +18,6 @@ package twisted.client;
 
 import java.util.ArrayList;
 
-import com.google.gwt.dom.client.Element;
-
 /** 
  * Common base for all components. 
  * <p>
@@ -60,6 +58,9 @@ public abstract class Component {
 	/** List of assets that this component requires. */
 	private ArrayList<String> requiredAssets = null;
 	
+	/** Utility helper class. */
+	protected ComponentUtils utils = null;
+	
 	/** 
 	 * If this component has run. 
 	 * <p>
@@ -86,8 +87,14 @@ public abstract class Component {
 		}
 	}
 	
-	/** Call to wait on a specific component instance by id. */
-	protected void requireComponentInstance(String id) {
+	/** 
+	 * Call to wait on a specific component instance by id. 
+	 * <p>
+	 * Note the difference between id and type; type is the type of
+	 * the component specified in the class="Component ComponentId-XXX",
+	 * while the id is the part in the id="XXX".
+	 */
+	protected void requireComponent(String id) {
 		Component c = root.getRegister().getComponent(id);
 		if (c == null) 
 			ComponentLog.trace(this.toString()+": Unable to depend on Component #"+id+". No such id.");
@@ -217,16 +224,6 @@ public abstract class Component {
 		return(root);
 	}
 	
-	/** Shortcut to get an asset. */
-	public Element getAsset(String id) {
-		return(getContainer().getAsset(id));
-	}
-	
-	/** Shortcut to get a value. */
-	public String getValue(String id) {
-		return(getContainer().getValue(id));
-	}
-	
 	/** 
 	 * Returns a string name for this component. 
 	 * <p>
@@ -260,6 +257,11 @@ public abstract class Component {
 	/** Returns true if the component has run. */
 	public boolean active() {
 		return(hasRun);
+	}
+	
+	/** Returns the helper utility class. */
+	public ComponentUtils getHelper() {
+	  return(utils);
 	}
 	
 	/** 
@@ -321,5 +323,6 @@ public abstract class Component {
 	 */
 	public Component(ComponentContainer root) {
 		this.root = root;
+		utils = new ComponentUtils(this);
 	}
 }

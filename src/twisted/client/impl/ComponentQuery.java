@@ -18,8 +18,6 @@ package twisted.client.impl;
 
 import java.util.ArrayList;
 
-import twisted.client.ComponentLog;
-
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
@@ -36,6 +34,9 @@ public class ComponentQuery {
 	/** Nodes for this list. */
 	private ArrayList<Element> nodes = null;
 	
+	/** Query type. */
+	public enum QueryType { CLASS, ID };
+	
 	/** Node list stack. */
 	private static ArrayList<NodeList<Node>> children = new ArrayList<NodeList<Node>>();
 	
@@ -43,14 +44,24 @@ public class ComponentQuery {
 		this.nodes = nodes;
 	}
 	
+	/** Returns a list of elements matching the given class from the document body. */
+	public static ComponentQuery query(String id) {
+	  return(query(id, Document.get().getBody(), QueryType.CLASS));
+	}
+	
+	/** Returns a list of elements matching the given class which are children of root. */
+	public static ComponentQuery query(String id, Element root) {
+	  return(query(id, root, QueryType.CLASS));
+	}
+	
 	/** Returns a list of elements matching the given classname from the document body. */
-	public static ComponentQuery query(String classname) {
-		ComponentQuery rtn = query(classname, Document.get().getBody());
+	public static ComponentQuery query(String id, QueryType type) {
+		ComponentQuery rtn = query(id, Document.get().getBody(), type);
 		return(rtn);
 	}
 	
 	/** Returns a list of elements matching the given classname which are children of root. */
-	public static ComponentQuery query(String classname, Element root) {
+	public static ComponentQuery query(String id, Element root, QueryType type) {
 		ComponentQuery rtn = null;
 		if (root != null) {
 			ArrayList<Element> rtnSet = new ArrayList<Element>();
@@ -64,8 +75,16 @@ public class ComponentQuery {
 					if (n.getNodeType() == Node.ELEMENT_NODE) {
 						if (n.hasChildNodes()) 
 							children.add(n.getChildNodes());
-						if (matchesClassTarget(n, classname)) 
-							rtnSet.add(Element.as(n));
+						switch(type) {
+  						case ID:
+  						  if (matchesIdTarget(n, id))
+    							rtnSet.add(Element.as(n));
+  						  break;
+  						case CLASS:
+    						if (matchesClassTarget(n, id)) 
+    							rtnSet.add(Element.as(n));
+    						break;
+						}
 					}
 				}
 			}
@@ -107,6 +126,15 @@ public class ComponentQuery {
 		return(rtn);
 	}
 	
+	/** Looks for a matching id... */
+	private static boolean matchesIdTarget(Node n, String id) {
+	  String nid = Element.as(n).getId();
+	  boolean rtn = false;
+	  if ((nid != null) && (nid.equals(id))) 
+	    rtn = true;
+    return(rtn);
+	}
+	
 	/** Returns the count of elements currently held. */
 	public int getLength() {
 		if (nodes == null)
@@ -121,5 +149,10 @@ public class ComponentQuery {
 		if (nodes != null)
 			rtn = nodes.get(index);
 		return(rtn);
+	}
+	
+	/** Check if the set contains a specific item. */
+	public boolean contains(Element test) {
+	  return(nodes.contains(test));
 	}
 }
