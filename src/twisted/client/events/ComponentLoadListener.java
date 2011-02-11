@@ -19,14 +19,17 @@ package twisted.client.events;
 import java.util.HashMap;
 
 import twisted.client.impl.ComponentFrame;
+import twisted.client.impl.ComponentListener;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.LoadEvent;
 import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.dom.client.HasLoadHandlers;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /** Allows key listeners to be bound to an element. */
-public class ComponentLoadListener extends ComponentFrame implements HasLoadHandlers {
+public class ComponentLoadListener extends ComponentListener implements HasLoadHandlers {
 
 	/** Click listener cache. */
 	private static HashMap<Element, ComponentLoadListener> localCache = new HashMap<Element, ComponentLoadListener>();
@@ -47,6 +50,10 @@ public class ComponentLoadListener extends ComponentFrame implements HasLoadHand
 
 	@Override
 	public HandlerRegistration addLoadHandler(LoadHandler handler) {
-        return addDomHandler(handler, LoadEvent.getType());
+    return addDomHandler(handler, LoadEvent.getType());
 	}
+
+  @Override
+  public void fireEvent(GwtEvent<?> event) {
+  }
 }

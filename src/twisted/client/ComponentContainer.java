@@ -157,6 +157,34 @@ public class ComponentContainer extends ComponentFrame {
 	}
 	
 	/** 
+	 * Sets the id for a component. 
+	 * <p>
+	 * This is specifically public static so it can be used to
+	 * process template component blocks before passing them to
+	 * the component register.
+	 * <p>
+	 * It's hard to find a specific target inside the block, since it
+	 * won't already have a unique id; so we use the specified class name
+	 * to find the element to set the id of; the first element found it
+	 * modified only.
+	 * <p>
+	 * To do that, do something like:<br/>
+	 * e.setInnerHtml("... &lt; div class='Component ComponentId-xxx' &gt; ...");<br/>
+	 * Element root = ComponentContainer.injectComponentId("ComponentId-xxx", "instanceName", e);
+	 */
+	public static Element injectComponentId(String target, String id, Element root) {
+	  Element rtn = null;
+		if (id != null) {
+		  ComponentQuery q = ComponentQuery.query(target, root);
+		  if (q.getLength() > 0) {
+  		  rtn = q.getItem(0);
+  		  rtn.setId(id);
+		  }
+		}
+		return(null);
+	}
+	
+	/** 
 	 * Sets the a specific value, by name.
 	 * <p>
 	 * This is specifically public static so it can be used to
@@ -165,10 +193,10 @@ public class ComponentContainer extends ComponentFrame {
 	 * <p>
 	 * To do that, do something like:<br/>
 	 * e.setInnerHtml(content);<br/>
-	 * Element root = e.getFirstChildElement();<br/>
-	 * ComponentContainer.injectValue(id, value, e);
+	 * Element root = ComponentContainer.injectComponentId(id, e);<br/>
+	 * ComponentContainer.injectComponentValue(id, value, root);
 	 */
-	public static void injectValue(String id, String  value, Element root) {
+	public static void injectComponentValue(String id, String  value, Element root) {
 		if ((id != null) && (value != null)) {
 			ArrayList<Element> set = getElementsNoCache("ComponentValue", "ComponentId-"+id, 1, root);
 			for (Element e : set) {
@@ -191,10 +219,10 @@ public class ComponentContainer extends ComponentFrame {
 	 * <p>
 	 * To do that, do something like:<br/>
 	 * e.setInnerHtml(content);<br/>
-	 * Element root = e.getFirstChildElement();<br/>
-	 * ComponentContainer.injectAsset(id, value, e);
+	 * Element root = ComponentContainer.injectComponentId(id, e);<br/>
+	 * ComponentContainer.injectComponentAsset(id, value, root);
 	 */
-	public static void injectAsset(String id, Element asset, Element root) {
+	public static void injectComponentAsset(String id, Element asset, Element root) {
 		if ((id != null) && (asset != null)) {
 		  if (!asset.getClassName().contains("ComponentAsset"))
   		  asset.addClassName("ComponentAsset");

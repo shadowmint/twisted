@@ -409,5 +409,6 @@ public class ComponentRegister {
 			else
 				CommonEvents.run(c);
 		}
+		readyListeners.clear();
 	}
 }

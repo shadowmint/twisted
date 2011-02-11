@@ -1,10 +1,10 @@
-/** 
+/**
  * Copyright 2010 Douglas Linder.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -19,6 +19,8 @@ package twisted.client.events;
 import java.util.HashMap;
 
 import twisted.client.impl.ComponentFrame;
+import twisted.client.impl.ComponentListener;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasAllMouseHandlers;
 import com.google.gwt.event.dom.client.MouseDownEvent;
@@ -33,14 +35,15 @@ import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.dom.client.MouseWheelHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /** Allows key listeners to be bound to an element. */
-public class ComponentMouseListener extends ComponentFrame implements HasAllMouseHandlers {
+public class ComponentMouseListener extends ComponentListener implements HasAllMouseHandlers {
 
 	/** Click listener cache. */
 	private static HashMap<Element, ComponentMouseListener> localCache = new HashMap<Element, ComponentMouseListener>();
-	
+
 	protected ComponentMouseListener(Element root) {
 		super(root);
 	}
@@ -57,31 +60,35 @@ public class ComponentMouseListener extends ComponentFrame implements HasAllMous
 
 	@Override
 	public HandlerRegistration addMouseDownHandler(MouseDownHandler handler) {
-        return addDomHandler(handler, MouseDownEvent.getType());
+    return addDomHandler(handler, MouseDownEvent.getType());
 	}
 
 	@Override
 	public HandlerRegistration addMouseUpHandler(MouseUpHandler handler) {
-        return addDomHandler(handler, MouseUpEvent.getType());
+    return addDomHandler(handler, MouseUpEvent.getType());
 	}
 
 	@Override
 	public HandlerRegistration addMouseOutHandler(MouseOutHandler handler) {
-        return addDomHandler(handler, MouseOutEvent.getType());
+    return addDomHandler(handler, MouseOutEvent.getType());
 	}
 
 	@Override
 	public HandlerRegistration addMouseOverHandler(MouseOverHandler handler) {
-        return addDomHandler(handler, MouseOverEvent.getType());
+    return addDomHandler(handler, MouseOverEvent.getType());
 	}
 
 	@Override
 	public HandlerRegistration addMouseMoveHandler(MouseMoveHandler handler) {
-        return addDomHandler(handler, MouseMoveEvent.getType());
+    return addDomHandler(handler, MouseMoveEvent.getType());
 	}
 
 	@Override
 	public HandlerRegistration addMouseWheelHandler(MouseWheelHandler handler) {
-        return addDomHandler(handler, MouseWheelEvent.getType());
+    return addDomHandler(handler, MouseWheelEvent.getType());
 	}
+
+  @Override
+  public void fireEvent(GwtEvent<?> event) {
+  }
 }

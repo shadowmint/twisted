@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.user.client.Window;
 
 /** Logs messages. */
@@ -45,6 +47,9 @@ public class ComponentLog {
 	
 	/** Debug level: Do everything. */
 	public static final EnumSet<DebugLevel> DEBUG_ALL = EnumSet.allOf(DebugLevel.class);
+	
+	/** Debug level: Gwt log messages only. */
+	public static final EnumSet<DebugLevel> DEBUG_GWT = EnumSet.of(DebugLevel.KEEP, DebugLevel.RAISE);
 	
 	/** Maximum size of messages to keep. */
 	private static final int MAX_LOG_SIZE = 50;
@@ -83,6 +88,12 @@ public class ComponentLog {
 				Document.get().getBody().appendChild(e);
 			}
 		}
+	}
+	
+	/** Dumps a native object as a tree. */
+	public static void trace(JavaScriptObject obj) {
+	  JSONObject temp = new JSONObject(obj);
+	  trace(temp.toString());
 	}
 	
 	/** Processes an exception with no listener. */

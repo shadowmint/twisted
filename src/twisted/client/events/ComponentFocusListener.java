@@ -1,10 +1,10 @@
-/** 
+/**
  * Copyright 2010 Douglas Linder.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -19,20 +19,23 @@ package twisted.client.events;
 import java.util.HashMap;
 
 import twisted.client.impl.ComponentFrame;
+import twisted.client.impl.ComponentListener;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.HasAllFocusHandlers;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /** Allows key listeners to be bound to an element. */
-public class ComponentFocusListener extends ComponentFrame implements HasAllFocusHandlers {
+public class ComponentFocusListener extends ComponentListener implements HasAllFocusHandlers {
 
 	/** Click listener cache. */
 	private static HashMap<Element, ComponentFocusListener> localCache = new HashMap<Element, ComponentFocusListener>();
-	
+
 	protected ComponentFocusListener(Element root) {
 		super(root);
 	}
@@ -56,4 +59,8 @@ public class ComponentFocusListener extends ComponentFrame implements HasAllFocu
 	public HandlerRegistration addBlurHandler(BlurHandler handler) {
         return addDomHandler(handler, BlurEvent.getType());
 	}
+
+  @Override
+  public void fireEvent(GwtEvent<?> event) {
+  }
 }

@@ -1,10 +1,10 @@
-/** 
+/**
  * Copyright 2010 Douglas Linder.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -19,18 +19,21 @@ package twisted.client.events;
 import java.util.HashMap;
 
 import twisted.client.impl.ComponentFrame;
+import twisted.client.impl.ComponentListener;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.HasChangeHandlers;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /** Allows key listeners to be bound to an element. */
-public class ComponentChangeListener extends ComponentFrame implements HasChangeHandlers {
+public class ComponentChangeListener extends ComponentListener implements HasChangeHandlers {
 
 	/** Click listener cache. */
 	private static HashMap<Element, ComponentChangeListener> localCache = new HashMap<Element, ComponentChangeListener>();
-	
+
 	protected ComponentChangeListener(Element root) {
 		super(root);
 	}
@@ -47,6 +50,10 @@ public class ComponentChangeListener extends ComponentFrame implements HasChange
 
 	@Override
 	public HandlerRegistration addChangeHandler(ChangeHandler handler) {
-        return addDomHandler(handler, ChangeEvent.getType());
+    return addDomHandler(handler, ChangeEvent.getType());
 	}
+
+  @Override
+  public void fireEvent(GwtEvent<?> event) {
+  }
 }

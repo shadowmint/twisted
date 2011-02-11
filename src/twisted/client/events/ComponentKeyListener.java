@@ -1,10 +1,10 @@
-/** 
+/**
  * Copyright 2010 Douglas Linder.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -19,6 +19,8 @@ package twisted.client.events;
 import java.util.HashMap;
 
 import twisted.client.impl.ComponentFrame;
+import twisted.client.impl.ComponentListener;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.HasAllKeyHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
@@ -27,14 +29,15 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 
 /** Allows key listeners to be bound to an element. */
-public class ComponentKeyListener extends ComponentFrame implements HasAllKeyHandlers {
+public class ComponentKeyListener extends ComponentListener implements HasAllKeyHandlers {
 
 	/** Click listener cache. */
 	private static HashMap<Element, ComponentKeyListener> localCache = new HashMap<Element, ComponentKeyListener>();
-	
+
 	protected ComponentKeyListener(Element root) {
 		super(root);
 	}
@@ -63,4 +66,8 @@ public class ComponentKeyListener extends ComponentFrame implements HasAllKeyHan
 	public HandlerRegistration addKeyPressHandler(KeyPressHandler handler) {
         return addDomHandler(handler, KeyPressEvent.getType());
 	}
+
+  @Override
+  public void fireEvent(GwtEvent<?> event) {
+  }
 }

@@ -87,13 +87,7 @@ public abstract class Component {
 		}
 	}
 	
-	/** 
-	 * Call to wait on a specific component instance by id. 
-	 * <p>
-	 * Note the difference between id and type; type is the type of
-	 * the component specified in the class="Component ComponentId-XXX",
-	 * while the id is the part in the id="XXX".
-	 */
+	/** Call to wait on a specific component instance by html element id. */
 	protected void requireComponent(String id) {
 		Component c = root.getRegister().getComponent(id);
 		if (c == null) 

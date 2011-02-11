@@ -19,7 +19,7 @@ public class SampleA extends Component {
 	public void init() {
 		requireComponent("IdSetToB");
 		Component anyInstance = getContainer().getRegister().getComponentByType("SampleC");
-		requireComponent(anyInstance);
+		requireComponentInstance(anyInstance);
 		requireValue("Value1");
 		requireAsset("Asset1");
 	}

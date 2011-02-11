@@ -26,7 +26,7 @@ import com.google.gwt.dom.client.NodeList;
 /** 
  * Custom query implementation. 
  * <p>
- * TODO: Once GWT supports getElementsByClassName, use that.<br/>
+ * TODO: ComponentQuery: Once GWT supports getElementsByClassName, use that.
  * see http://code.google.com/p/google-web-toolkit/issues/detail?id=3441
  */
 public class ComponentQuery {

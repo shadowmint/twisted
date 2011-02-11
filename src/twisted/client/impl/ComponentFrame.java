@@ -16,6 +16,8 @@
 
 package twisted.client.impl;
 
+import java.util.HashMap;
+
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
@@ -25,10 +27,15 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
  * In general HTML elements are not valid containers for GWT events
  * and widgets; this wrapper enables that functionality.
  * <p>
- * This is not an event listener. Use the twisted.client.events.* 
- * classes to handle event bindings on DOM elements directly.
+ * Use the twisted.client.events.* classes to handle event bindings 
+ * on DOM elements directly; they will call this, but also have event
+ * bindings. Cache is part of ComponentFrame now so the event listeners
+ * can share elements with events.
  */
-public abstract class ComponentFrame extends AbsolutePanel {
+public class ComponentFrame extends AbsolutePanel {
+	
+	/** Click listener cache. */
+	private static HashMap<Element, ComponentFrame> cache = new HashMap<Element, ComponentFrame>();
 	
 	/** Internal element. */
 	protected Element root = null;
@@ -47,5 +54,15 @@ public abstract class ComponentFrame extends AbsolutePanel {
 	/** Returns the root element. */
 	public Element getRootElement() {
 		return(root);
+	}
+	
+	/** Returns a cached copy of the click listener for an object. */
+	public static ComponentFrame get(Element root) {
+		ComponentFrame rtn = cache.get(root);
+		if ((rtn == null) && (root != null)) {
+			rtn = new ComponentFrame(root);
+			cache.put(root, rtn);
+		}
+		return(rtn);
 	}
 }
